@@ -6,17 +6,14 @@ import Codages
 import EtatInitial
 import json
 
-#Module pour cronstruire des genealogies apres l'apprentissage
-#En utilisant le codage des etats avec des blocs de 3 marqueurs avec chevauchement
+#Module to build ARGs after training with ensemble method: Mean 
+#Feature vector: blocks of 3 SNPs overlapping by 1 step shift
 
 L = 10 #number of markers
 DICT_ETAT_FINAL = {(0,0,0,0,0,0,0,0,0,0) : 1} #final state
 
 #trained model
 model = MyNN.MyModel()
-
-#File to stock the genealogy
-#nomFichier2 = 'textFiles/NN_MC/tests.txt'
 
 #File to stock length of genealogies
 nomFichier3 = 'textFiles/Test_Agent1a13_Mean.txt'
@@ -67,15 +64,8 @@ listeMod = [ListeNomModele]
 with open(nomFichier3, 'a') as f2:
     f2.writelines('Echantillon' + "\t" + 'Longueur' + "\t" + 'm' + "\t" + 'Agent')
 
-#nbrAgents = len(ListeNomModele) #number of agents trained
-#nbrModels = 1 #number of models per agents
 
-#Fichier pour conserver longueur des genealogies
-#with open(nomFichier3, 'a') as f2:
-#    f2.writelines('Echantillon' + "\t" + 'Longueur' + "\t" + 'm' + "\t" + 'Genealogies')
-
-
-#On construit des généalogies après l'apprentissage
+#Building ARGs
 for e in range(len(listeMod)):
 
     ListeNomsModele = listeMod[e]
@@ -86,37 +76,22 @@ for e in range(len(listeMod)):
         listeLongueur = [0] * nbrGen
 
         for gen in range(nbrGen):
-            #on change l'etat initial
+            #change initial state
             dictEtatS = EtatInitial.S0(POP, (new + 1), m, sizeTest, indexTest)
-            etatS = Codages.Blocs3Plus(dictEtatS, L-2)
-
-            #print(dictEtatS)
-
-            #On inscrit dans un fichier la genealogie
-            # with open(nomFichier2, 'a') as f:
-            #     f.writelines('\n')
-            #     f.writelines(str(dictEtatS))
-            #     f.writelines('\n')
-                        
+            etatS = Codages.Blocs3Plus(dictEtatS, L-2)           
                 
             steps = 1
             while (dictEtatS != DICT_ETAT_FINAL) and (steps < plafond) :
-                #on verifie actions possibles et genere les etats suivants possibles
-                # Coal = Actions5.coalID(dictEtatS)
-                # Mut = Actions5.Mutation(dictEtatS, L)
-                # CoalDif = Actions5.coalDif(dictEtatS)
-                # Rec = Actions5.recombin(dictEtatS)
-                # etatSuivantS = Coal[0] + Mut[0] + CoalDif[0] + Rec[0] #etats suivants possibles
-                # actionsPoss = Coal[1] + Mut[1] + CoalDif[1] + Rec[1] #actions menant aux etats suivants
-
+                #possible next states
                 etatSuivantS = Actions2.coalID(dictEtatS)
                 etatSuivantS = etatSuivantS  + Actions2.Mutation(dictEtatS, L)
                 etatSuivantS = etatSuivantS  + Actions2.coalDif(dictEtatS)
                 etatSuivantS = etatSuivantS  + Actions2.recombin(dictEtatS)
 
-                #On choisit etat suivant
-                #valeur estimee de chaque etat suivant possible
+                #choosing next state
+                #estimated values of possible next states
                 hatValue = torch.zeros((len(etatSuivantS),nbrMod,))
+                #for each agent 
                 for modele in range(nbrMod):
 
                     nomModele = ListeNomsModele[modele]
@@ -135,31 +110,18 @@ for e in range(len(listeMod)):
                             
                         j = j+1
 
+                #mean of estimated values
                 v = torch.mean(hatValue, 1) 
                     
                 if not etatFinalTrouve:
-                    #on choisit etat suivant avec valeur plus elevee    
+                    #next state with highest estimated value   
                     allIndexSPrime = [x for x in range(len(v)) if v[x] == max(v)]
                     indexSPrime = random.choice(allIndexSPrime)
-                    #print('valeur')
-                    #print(v)
-                    #print(v[indexSPrime])
-                    #print(etatSuivantS[indexSPrime])
                         
-                #s' devient s
+                #next state s' becomes actual state s
                 dictEtatS = etatSuivantS[indexSPrime]
                 etatS = Codages.Blocs3Plus(dictEtatS, L-2)
-                #actionChoisie = actionsPoss[indexSPrime]
-
-                #On inscrit dans un fichier la genealogie
-                # with open(nomFichier2, 'a') as f:
-                #     f.writelines(str(dictEtatS))
-                #     f.writelines('\n')
-                    #f.writelines(str(actionChoisie))
-                    #f.writelines('\n')
-
-                    
-                #print(steps)
+            
                 steps = steps + 1
 
             listeLongueur[gen] = steps

@@ -6,7 +6,7 @@ import Codages
 import EtatInitial
 import json
 
-#Module pour cronstruire des genealogies apres l'apprentissage
+#Module to build ARGs after training on validation set (to select best model for each agent)
 #En utilisant le codage des etats avec des blocs de 3 marqueurs avec chevauchement
 
 L = 10 #number of markers
@@ -63,7 +63,7 @@ with open(nomFichier, 'a') as f2:
 nbrModels = int((100_000 - 40_000)/(sizeTrain/5) + 1) #number of models per agents
 m = 25 #sample size
 plafond = 300 #max steps
-Seeds =[126, 124, 128, 131, 132, 805, 804, 799, 795, 796, 797]#123, 125, 126, 124, 127, 128, 131, 132, 805, 804, 799, 795, 796, 797]
+Seeds =[123, 125, 126, 124, 128, 131, 132, 805, 804, 799, 795, 796, 797]
 nbrAgents = len(Seeds) #number of agents trained
 bestMod = [0] * nbrAgents
 
@@ -97,23 +97,10 @@ for t in range(nbrAgents):
                 #initial state
                 dictEtatS = EtatInitial.S0(POP, (new + 1), m, sizeValid, indexValid)
                 etatS = Codages.Blocs3Plus(dictEtatS, L-2)
-
-                #On inscrit dans un fichier la genealogie
-                # with open(nomFichier2, 'a') as f:
-                #     f.writelines('\n')
-                #     f.writelines(str(dictEtatS))
-                #     f.writelines('\n') 
                 
                 steps = 0
                 while (dictEtatS != DICT_ETAT_FINAL) and (steps < plafond) :
-                    #possible actions and next states
-                    # Coal = Actions5.coalID(dictEtatS)
-                    # Mut = Actions5.Mutation(dictEtatS, L)
-                    # CoalDif = Actions5.coalDif(dictEtatS)
-                    # Rec = Actions5.recombin(dictEtatS)
-                    # etatSuivantS = Coal[0] + Mut[0] + CoalDif[0] + Rec[0] #etats suivants possibles
-                    # actionsPoss = Coal[1] + Mut[1] + CoalDif[1] + Rec[1] #actions menant aux etats suivants
-
+                    #possible next states
                     etatSuivantS = Actions2.coalID(dictEtatS)
                     etatSuivantS = etatSuivantS  + Actions2.Mutation(dictEtatS, L)
                     etatSuivantS = etatSuivantS  + Actions2.coalDif(dictEtatS)
@@ -139,23 +126,11 @@ for t in range(nbrAgents):
                         #next state (highest estimated value)    
                         allIndexSPrime = [x for x in range(len(v)) if v[x] == max(v)]
                         indexSPrime = random.choice(allIndexSPrime)
-                        #print('valeur')
-                        #print(v[indexSPrime])
-                        #print(etatSuivantS[indexSPrime])
                         
                     #s' becomes s
                     dictEtatS = etatSuivantS[indexSPrime]
                     etatS = Codages.Blocs3Plus(dictEtatS, L-2)
-                    #actionChoisie = actionsPoss[indexSPrime]
-
-                    #On inscrit dans un fichier la genealogie
-                    # with open(nomFichier2, 'a') as f:
-                    #     f.writelines(str(dictEtatS))
-                    #     f.writelines('\n')
-                        #f.writelines(str(actionChoisie))
-                        #f.writelines('\n')
-
-                    #print(steps)
+                   
                     steps = steps + 1
 
                 listeLongueur[gen] = steps
@@ -172,6 +147,7 @@ for t in range(nbrAgents):
             print(new)
             print(str(min(listeLongueur)))
 
+        #proportion of infinite-length ARGs
         propInfGen = nbrInfGen/nbrEch
         if(len(allLen) != 0):
             aveLen = sum(allLen) / len(allLen)

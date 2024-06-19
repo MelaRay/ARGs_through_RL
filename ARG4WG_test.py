@@ -4,17 +4,14 @@ import MyModelNN as MyNN
 import EtatInitial
 import json
 
-#Module to build ARGs with ARG4WG
-#En utilisant le codage des etats avec des blocs de 3 marqueurs avec chevauchement
+#Module to build ARGs with ARG4WG on test set
 
 L = 10 #number of markers
 DICT_ETAT_FINAL = {(0,0,0,0,0,0,0,0,0,0) : 1} #final state
 
-
 #File to stock length of genealogies
 nomFichier3 = 'textFiles/ARG4WG_echantTests_BON.txt'
 
-#nbrEch = 20 #number of samples 
 nbrGen = 100 #number of genealogies to build
 
 #File to stock length of genealogies
@@ -52,34 +49,20 @@ for ind in indexValid:
 for gen in range(nbrGen):
     steps = 0
 
+    #initial state
     dictEtatS = EtatInitial.S0(POP, (gen + 1), m, sizeTest, indexTest)
-    #print(dictEtatS)
-
-    #dictEtatS = {(0, 0, 1, 0, 1, 1, 1, 0, 0, 0) : 1, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 2, (0, 0, 0, 0, 0, 1, 1, 0, 0, 0) : 27, (0, 0, 1, 1, 0, 0, 0, 1, 0, 1) : 6, (1, 0, 0, 0, 0, 1, 1, 0, 1, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 0, 0, 1) : 2, (1, 1, 0, 0, 0, 1, 1, 0, 1, 0) : 4, (0, 0, 1, 1, 0, 0, 0, 1, 0, 0) : 19}
-    #dictEtatS = {(0, 0, 1, 0, 1, 1, 1, 0, 0, 0) : 1, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 1, (0, 0, 0, 0, 0, 1, 1, 0, 0, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 1, 0, 1) : 1, (1, 0, 0, 0, 0, 1, 1, 0, 1, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 0, 0, 1) : 1, (1, 1, 0, 0, 0, 1, 1, 0, 1, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 1, 0, 0) : 1}
-    
-    #dictEtatS = {(0, 0, 0, 0, 1, 1, 0, 0, 0, 1) : 14, (1, 0, 0, 0, 0, 0, 1, 0, 0, 0) : 9, (0, 0, 1, 1, 0, 0, 0,0, 0, 0) : 7, (0, 0, 0, 0, 0, 0, 0, 1, 0, 0) : 4, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 13, (0, 0, 0,0, 0, 1, 0, 0, 0, 1) : 4, (0, 0, 0, 0, 1, 1, 0, 0, 1, 1) : 2, (0, 0, 1, 1, 0, 0, 1, 0, 0, 0) : 4,(0, 1, 0, 0, 1, 1, 0, 0, 0, 1) : 3}
-
-    #ech2 msprime
-    #dictEtatS = {(0, 0, 0, 0, 1, 1, 0, 0, 0, 1) : 1, (1, 0, 0, 0, 0, 0, 1, 0, 0, 0) : 1, (0, 0, 1, 1, 0, 0, 0,0, 0, 0) : 1, (0, 0, 0, 0, 0, 0, 0, 1, 0, 0) : 1, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 1, (0, 0, 0,0, 0, 1, 0, 0, 0, 1) : 1, (0, 0, 0, 0, 1, 1, 0, 0, 1, 1) : 1, (0, 0, 1, 1, 0, 0, 1, 0, 0, 0) : 1,(0, 1, 0, 0, 1, 1, 0, 0, 0, 1) : 1}
-    #avec toutes les sequences
-    #dictEtatS = {(0, 0, 0, 0, 1, 1, 0, 0, 0, 1) : 14, (1, 0, 0, 0, 0, 0, 1, 0, 0, 0) : 9, (0, 0, 1, 1, 0, 0, 0,0, 0, 0) : 7, (0, 0, 0, 0, 0, 0, 0, 1, 0, 0) : 4, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 13, (0, 0, 0,0, 0, 1, 0, 0, 0, 1) : 4, (0, 0, 0, 0, 1, 1, 0, 0, 1, 1) : 2, (0, 0, 1, 1, 0, 0, 1, 0, 0, 0) : 4,(0, 1, 0, 0, 1, 1, 0, 0, 0, 1) : 3}
-    
-    #meme echantillon (ech1) avec marqueurs 0, 1, 9
-    #dictEtatS = {(0, 0, 1, 0, 1, 1, 1, 0, 0, 0) : 1, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 1, (0, 0, 0, 0, 0, 1, 1, 0, 0, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 1, 0, 1) : 1, (1, 0, 0, 0, 0, 1, 1, 0, 1, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 0, 0, 1) : 1, (1, 1, 0, 0, 0, 1, 1, 0, 1, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 1, 0, 0) : 1}
-    #avec toutes les sequences
-    #dictEtatS = {(0, 0, 1, 0, 1, 1, 1, 0, 0, 0) : 1, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 2, (0, 0, 0, 0, 0, 1, 1, 0, 0, 0) : 27, (0, 0, 1, 1, 0, 0, 0, 1, 0, 1) : 6, (1, 0, 0, 0, 0, 1, 1, 0, 1, 0) : 1, (0, 0, 1, 1, 0, 0, 0, 0, 0, 1) : 2, (1, 1, 0, 0, 0, 1, 1, 0, 1, 0) : 4, (0, 0, 1, 1, 0, 0, 0, 1, 0, 0) : 19}
-    
+   
     while (dictEtatS != DICT_ETAT_FINAL and steps < 400):
-        #possible actions and next states
+        #possible coalescences and next states
         Coal = Actions5.coalID(dictEtatS)
         CoalDif = Actions5.coalDif(dictEtatS)
-        etatSuivantS = Coal[0] + CoalDif[0] #etats suivants possibles
-        actionsPoss = Coal[1] + CoalDif[1] #actions menant aux etats suivants
+        etatSuivantS = Coal[0] + CoalDif[0] #possible next states
+        actionsPoss = Coal[1] + CoalDif[1] #actions leading to next states
         if len(actionsPoss) != 0:
             indexSPrime = random.randint(0, len(etatSuivantS) - 1)
             dictEtatS = etatSuivantS[indexSPrime]
         else:
+            #possible mutations and next states
             Mut = Actions5.Mutation(dictEtatS, L)
             etatSuivantS = etatSuivantS + Mut[0] #etats suivants possibles
             actionsPoss = actionsPoss + Mut[1] #actions menant aux etats suivants
@@ -88,11 +71,11 @@ for gen in range(nbrGen):
                 indexSPrime = random.randint(0, len(etatSuivantS) - 1)
                 dictEtatS = etatSuivantS[indexSPrime]
             else:
+                #if no coalescence and no mutation possible, do recombination
                 dictEtatS = Actions5.recombin(dictEtatS, L)
                 steps = steps + 1
 
         steps = steps + 1
-        #print(dictEtatS)
     
     print(steps)
 

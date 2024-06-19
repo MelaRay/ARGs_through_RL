@@ -4,12 +4,10 @@ import MyModelNN as MyNN
 import EtatInitial
 import json
 
-#Module pour cronstruire des genealogies apres l'apprentissage
-#En utilisant le codage des etats avec des blocs de 3 marqueurs avec chevauchement
+#Module to build ARGs with ARG4WG, for 60 samples used when learning with same initial state
 
 L = 10 #number of markers
 DICT_ETAT_FINAL = {(0,0,0,0,0,0,0,0,0,0) : 1} #final state
-
 
 #File to stock length of genealogies
 nomFichier3 = 'textFiles/test.txt'
@@ -20,8 +18,6 @@ nbrGen = 1 #number of genealogies to build per sample
 #File to stock length of genealogies
 with open(nomFichier3, 'a') as f2:
     f2.writelines('Longueur' + "\t" + 'n' + "\t" + 'Genealogies' + "\t" + 'Echantillon' + "\t" + 'Methode')
-
-#m = 50 #sample size
 
 #Simulated population
 with open("pop2", "r") as fp:
@@ -45,36 +41,32 @@ for new in range(nbrEch):
         steps = 0
 
         dictEtatS = dictEtatS = EtatInitial.S0_all(POP, indexEch, n, range(len(POP)))
-        #dictEtatS = dictEtatS = EtatInitial.S0_all(POP, indexEch, n, range(len(POP)))
-        #print(dictEtatS)
         random.seed(gen)
 
         while (dictEtatS != DICT_ETAT_FINAL and steps < 400):
-            #possible actions and next states
+            #possible coalescences and next states
             Coal = Actions5.coalID(dictEtatS)
             CoalDif = Actions5.coalDif(dictEtatS)
-            etatSuivantS = Coal[0] + CoalDif[0] #etats suivants possibles
-            actionsPoss = Coal[1] + CoalDif[1] #actions menant aux etats suivants
+            etatSuivantS = Coal[0] + CoalDif[0] #possible next states
+            actionsPoss = Coal[1] + CoalDif[1] #actions leading to next states
             if len(actionsPoss) != 0:
                 indexSPrime = random.randint(0, len(etatSuivantS) - 1)
                 dictEtatS = etatSuivantS[indexSPrime]
             else:
+                #possibles mutations and next states
                 Mut = Actions5.Mutation(dictEtatS, L)
-                etatSuivantS = etatSuivantS + Mut[0] #etats suivants possibles
-                actionsPoss = actionsPoss + Mut[1] #actions menant aux etats suivants
+                etatSuivantS = etatSuivantS + Mut[0] #possible next states
+                actionsPoss = actionsPoss + Mut[1] #actions leading to next states
 
                 if len(actionsPoss) != 0:
                     indexSPrime = random.randint(0, len(etatSuivantS) - 1)
                     dictEtatS = etatSuivantS[indexSPrime]
                 else:
+                    #if no coalescence and no mutation possible, do recombination
                     dictEtatS = Actions5.recombin(dictEtatS, L)
                     steps = steps + 1
 
             steps = steps + 1
-            if(new == 55):
-                print(dictEtatS)
-        
-        print(steps)
 
         with open(nomFichier3, 'a') as f2:
             f2.writelines('\n')

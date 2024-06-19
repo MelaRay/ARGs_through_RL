@@ -2,11 +2,10 @@ import itertools
 import torch
 import math
 
-#Fonctions pour les differents codages des etats :
-# par blocs, matrice d'haplotypes 
+#Module with functions to code feature vector
+#by blocks of markers, with a matrix of haplotypes 
 
-#Constantes
-#Tous les blocs de 2, 3 marqueurs
+#blocks of 2 and 3 markers
 ALL_marqueurs = [0,1,9]
 BLOCS_2 = list(itertools.product(ALL_marqueurs, repeat = 2))
 BLOCS_3 = list(itertools.product(ALL_marqueurs, repeat = 3))
@@ -33,6 +32,7 @@ def Blocs1(dictEtatS, k):
                 i = i + 1
 
     return etatS
+
 #Codage blocs de 2 SANS chevauchements
 #Parametres : dictEtatS, dictionnaire des sequences a l'etat s,
 #           k, nombre de blocs

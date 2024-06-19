@@ -14,9 +14,6 @@ DICT_ETAT_FINAL = {(0,0,0,0,0,0,0,0,0,0) : 1} #final state
 #trained model
 model = MyNN.MyModel()
 
-#File to stock the genealogy
-#nomFichier2 = 'textFiles/NN_MC/tests.txt'
-
 #File to stock length of genealogies
 nomFichier3 = 'textFiles/Test_Agent1a13_Maj.txt'
 
@@ -79,14 +76,7 @@ for e in range(len(listeMod)):
         for gen in range(nbrGen):
             #change initial state
             dictEtatS = EtatInitial.S0(POP, (new + 1), m, sizeTest, indexTest)
-            etatS = Codages.Blocs3Plus(dictEtatS, L-2)
-
-            #File with ARGs
-            # with open(nomFichier2, 'a') as f:
-            #     f.writelines('\n')
-            #     f.writelines(str(dictEtatS))
-            #     f.writelines('\n')
-                        
+            etatS = Codages.Blocs3Plus(dictEtatS, L-2)        
                 
             steps = 1
             while (dictEtatS != DICT_ETAT_FINAL) and (steps < plafond) :
