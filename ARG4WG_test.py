@@ -1,12 +1,10 @@
 import random
 import Actions5
 import MyModelNN as MyNN
-import torch
-import Codages
 import EtatInitial
 import json
 
-#Module pour cronstruire des genealogies apres l'apprentissage
+#Module to build ARGs with ARG4WG
 #En utilisant le codage des etats avec des blocs de 3 marqueurs avec chevauchement
 
 L = 10 #number of markers
