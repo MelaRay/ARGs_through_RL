@@ -7,7 +7,7 @@ import EtatInitial
 import json
 
 #Module to build ARGs after training on validation set (to select best model for each agent)
-#En utilisant le codage des etats avec des blocs de 3 marqueurs avec chevauchement
+#Feature vector: blocks of 3 SNPs overlapping by 1 step shift
 
 L = 10 #number of markers
 DICT_ETAT_FINAL = {(0,0,0,0,0,0,0,0,0,0) : 1} #final state

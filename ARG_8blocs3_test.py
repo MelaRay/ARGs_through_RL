@@ -63,7 +63,6 @@ with open(nomFichier3, 'a') as f2:
 nbrAgents = len(ListeNomModele) #number of agents trained
 nbrModels = 1 #number of models per agents
 
-
 #Building ARGs after learning process
 for t in range(nbrAgents):
 

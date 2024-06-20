@@ -54,8 +54,8 @@ def Mutation(dictEtatS, L):
     return etatSuivant
  
 #Function to identify coalescence between sequences of different types
-#parameters : dictEtatS, dictionnary with type of sequences in state s as key and number of sequences of key type as value
-#return : list of dictionnaries of possible next states
+#parameters: dictEtatS, dictionnary with type of sequences in state s as key and number of sequences of key type as value
+#return: list of dictionnaries of possible next states
 def coalDif(dictEtatS):
     etatSuivant = []
     dict2 = dictEtatS.copy()
@@ -109,8 +109,8 @@ def coalDif(dictEtatS):
     return etatSuivant
  
 #Function to identify possible recombinations
-#parameters : dictEtatS, dictionnary with type of sequences in state s as key and number of sequences of key type as value
-#return : list of dictionnaries of possible next states
+#parameters: dictEtatS, dictionnary with type of sequences in state s as key and number of sequences of key type as value
+#return: list of dictionnaries of possible next states
 def recombin(dictEtatS):
     etatSuivant = []
     for seq in dictEtatS: #for each sequence in state s
