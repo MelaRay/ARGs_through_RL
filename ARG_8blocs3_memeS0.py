@@ -41,12 +41,8 @@ n = 0
 #Building ARGs after learning process
 for new in range(nbrEch):
 
-    if(new < 46):
-        nomModele = 'model_echant' + str(new) + '_new.pth'
-        model.load_state_dict(torch.load(nomModele))
-    else:
-        nomModele = 'model_echant' + str(new) + '.pth'
-        model.load_state_dict(torch.load(nomModele))
+    nomModele = 'model_echant' + str(new) + '_new.pth'
+    model.load_state_dict(torch.load(nomModele))
 
     indexEch = indexEch + n
 

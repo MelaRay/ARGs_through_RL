@@ -1,16 +1,17 @@
 import random
 
-### fonction pour creer un etat initial a partir d'une population
-#parametres : pop, liste de toutes les sequences dans la population
-#           e, numero de l'episode
-#           m, taille des echantillons
-#           taille,Pop, taille de la population
-#           index, liste d'indices de 0 a taille de la population,
-# le premier echantillon est compose des individus correspondant aux 
-# (taille de la population)/(taille échantillon) premiers indices, le 2e, 
-# les (taille de la population)/(taille échantillon) suivants et ainsi de suite.
+#Module with functions to create initial state from a set of sequences
+
+#function to create initial state from a set of sequences keeping all sequences
+#parameters: pop, list of all sequences from the population
+#           e, number of the episode
+#           m, sample size
+#           taillePop, population size
+#           index, list of indexes from 0 to population size, random order
+# (population size)/(sample size) first indexes are sequences in first sample, 
+# (population size)/(sample size) next indexes are sequences in second sample and so on.
 #
-# retourne un dictionnaire de l'etat initial (une sequence de chaque type echantillonne)
+# return: dictionnary of state s (all sequences)
 
 def S0(pop, e, m, taillePop, index):
     
@@ -21,23 +22,20 @@ def S0(pop, e, m, taillePop, index):
         indice = index[i]
         individu = tuple(pop[indice])
         if(individu not in dict):
-            dict[individu] = 1 #nouvel etat avec seq. individu
+            dict[individu] = 1 
         else:
             dict[individu] = dict[individu] + 1
 
     return dict
 
-### fonction pour creer un etat initial a partir d'une population
-#renvoie x fois le meme echantillon avant de changer
-#parametres : pop, liste de toutes les sequences dans la population
-#           r, indice (de index) du premier individu de l'echantillon
-#           m, taille des echantillons
-#           index, liste d'indices de 0 a taille de la population,
-# le premier echantillon est compose des individus correspondant aux 
-# (taille de la population)/(taille échantillon) premiers indices, le 2e, 
-# les (taille de la population)/(taille échantillon) suivants et ainsi de suite.
+#function to create initial state from a set of sequences keeping one sequence of each type
+#parameters: pop, list of all sequences from the population
+#           r, index for first sequence in sample
+#           m, sample size
+#           taillePop, population size
+#           index, list of indexes from 0 to population size
 #
-# retourne un dictionnaire de l'etat initial (une sequence de chaque type echantillonne)
+# return: dictionnary of state s (one sequence of each type)
 
 def S0_x(pop, r, m, index):
     
@@ -46,19 +44,6 @@ def S0_x(pop, r, m, index):
         indice = index[i]
         individu = tuple(pop[indice])
         if(individu not in dict):
-            dict[individu] = 1 #nouvel etat avec seq. individu
-
-    return dict
-
-def S0_all(pop, r, m, index):
-    
-    dict = {}
-    for i in range(r, r + m):
-        indice = index[i]
-        individu = tuple(pop[indice])
-        if(individu not in dict):
-            dict[individu] = 1 #nouvel etat avec seq. individu
-        else:
-            dict[individu] = dict[individu] + 1
+            dict[individu] = 1 
 
     return dict

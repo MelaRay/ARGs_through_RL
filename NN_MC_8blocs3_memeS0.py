@@ -8,7 +8,8 @@ import EtatInitial
 import time
 import json
 
-#Monte Carlo algorithm with neural network
+#Module for approximation method: same initial state
+#RL Monte Carlo algorithm with neural network
 #Feature vector : blocks of 3 markers with overlaps
 
 L = 10 #number of markers
@@ -18,7 +19,7 @@ epsilon = 0.1 #exploration rate
 #Final state
 DICT_ETAT_FINAL = {(0, 0, 0, 0, 0, 0, 0, 0, 0, 0) : 1}
 
-nbEpisodes = 10_000 #nombre de genealogies a generer
+nbEpisodes = 10_000 #number of episodes per sample
 nomFichier = 'textFiles/Longueur_memeS0_60ech_N0_v2.txt'
 nomFichierTemps = 'textFiles/Temps_memeS0_60ech_N0_v2.txt'
 
@@ -33,8 +34,7 @@ with open(nomFichier, 'a') as f:
 with open(nomFichierTemps, 'a') as f:
     f.writelines('Genealogies' + "\t" + 'Temps')
 
-
-nbrEch = 60
+nbrEch = 60 #number of samples
 indexSize = 0
 sampleSizes = [40, 60, 100]
 
@@ -47,8 +47,6 @@ for noEch in range(nbrEch):
     torch.manual_seed(124)
     model = MyNN.MyModel()
     optimizer = torch.optim.SGD(model.parameters(), lr= alpha)
-    #nomModele = 'model_m5All_new_66000_124.pth'
-    #model.load_state_dict(torch.load(nomModele))
     loss_fn = torch.nn.MSELoss()
     indexEch = indexEch + n
 
@@ -67,9 +65,6 @@ for noEch in range(nbrEch):
         #Same initial state 
         dictEtatS = EtatInitial.S0_x(POP, indexEch, n, range(len(POP)))
 
-        #print(len(dictEtatS))
-        #print(n)
-        #print(dictEtatS)
         etatS = Codages.Blocs3Plus(dictEtatS, L-2)
 
         random.seed(e) 
@@ -125,14 +120,11 @@ for noEch in range(nbrEch):
             etat = torch.tensor([etatS], dtype = torch.float32)
             genealogy = torch.cat((genealogy, etat), 0)
 
-            #print(dictEtatS)
-            #s' devient s
+            #s' becomes s
             dictEtatS = etatSuivantS[indexSPrime]
             etatS = Codages.Blocs3Plus(dictEtatS, L-2)
         
-            #print(steps)
             steps = steps + 1
-            #print(dictEtatS)
 
         print(e)
         print(steps)
@@ -147,7 +139,6 @@ for noEch in range(nbrEch):
 
         pred = torch.tensor([])
 
-        
         #Length of the genealogy
         with open(nomFichier, 'a') as f:
             f.writelines('\n')
@@ -156,7 +147,7 @@ for noEch in range(nbrEch):
         e = e + 1
 
     #Saving final model
-    nomModele = 'model_echant' + str(noEch) + '_N0v2.pth'
+    nomModele = 'model_echant' + str(noEch) + '_new.pth'
     torch.save(model.state_dict(), nomModele)
 
     TimeEnd = time.time()

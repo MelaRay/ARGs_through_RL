@@ -8,8 +8,9 @@ import json
 import EtatInitial
 import time
 
-#Monte Carlo algorithm with neural network
-#Feature vector : blocks of 3 markers with overlaps
+#Module for approximation method: generalization
+#RL Monte Carlo algorithm with neural network
+#Feature vector : blocks of 3 markers overlapping by one step shift
 
 with open("pop1", "r") as fp:
      POP = json.load(fp)
@@ -42,7 +43,7 @@ epsilon = 0.1 #exploration rate
 #Final state
 DICT_ETAT_FINAL = {(0,0,0,0,0,0,0,0,0,0) : 1}
 
-nbEpisodes = 100_000 #nombre de genealogies a generer
+nbEpisodes = 100_000 #number of episodes
 nomFichier = 'textFiles/Longueur_14agents.txt'
 nomFichierTemps = 'textFiles/Temps_14agents.txt'
 
@@ -54,9 +55,9 @@ with open(nomFichier, 'a') as f:
 with open(nomFichierTemps, 'a') as f:
     f.writelines('Genealogies' + "\t" + 'Temps')
 
-Seeds =[123, 125, 126, 124, 127, 128, 131, 132, 805, 804, 799, 795, 796, 797]
+Seeds =[123, 125, 126, 124, 127, 128, 131, 132, 805, 804, 799, 795, 796, 797] #seeds for each agent
 nbrAgents = len(Seeds)
-m = 5
+m = 5 #sample size
 
 for no_mod in range(nbrAgents):
 
@@ -85,9 +86,6 @@ for no_mod in range(nbrAgents):
         dictEtatS = EtatInitial.S0(POP, e, m, sizeTrain, index)
           
         etatS = Codages.Blocs3Plus(dictEtatS, L-2)
-
-        #print(dictEtatS)
-        #print(len(dictEtatS))
         
         steps = 1
         explo = 0 #exploration rate of the episode
@@ -140,12 +138,10 @@ for no_mod in range(nbrAgents):
             etat = torch.tensor([etatS], dtype = torch.float32)
             genealogy = torch.cat((genealogy, etat), 0)
 
-            #print(dictEtatS)
-            #s' devient s
+            #s' becomes s
             dictEtatS = etatSuivantS[indexSPrime]
             etatS = Codages.Blocs3Plus(dictEtatS, L-2)
         
-            #print(steps)
             steps = steps + 1
 
         print(e)
@@ -160,7 +156,6 @@ for no_mod in range(nbrAgents):
         optimizer.zero_grad()
 
         pred = torch.tensor([])
-
         
         #Length of the genealogy
         with open(nomFichier, 'a') as f:
@@ -186,9 +181,6 @@ for no_mod in range(nbrAgents):
                 f.writelines(str(e) + "\t" + str(temps))
 
         e = e + 1
-
-    #Saving final model
-    #torch.save(model.state_dict(), nomModeleFinal)
 
 
 
