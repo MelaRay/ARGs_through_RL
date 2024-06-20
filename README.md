@@ -26,4 +26,4 @@ This repository contains all code, files, and models used for the article "Const
 
 ## pth files
 1. model_echant*no*_new.pth: learned model, always using sample *no* as initial state.
-2. model_m5All_new_*no episode*_*seed*.pth: models stored during training with the generalization method using samples of 5 sequences as initial state. The model was saved after *no episode* episodes and using *seed* as seed.
+2. model_m5All_new_*no episode*_*seed*.pth: models saved during training for 13 different agents using the generalization method with samples of 5 sequences as initial state. The model was saved after *no episode* episodes and using *seed* as seed (each seed corresponds to one agent).
