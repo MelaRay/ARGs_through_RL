@@ -13,7 +13,7 @@ This repository contains all code, files, and models used for the article "Const
 4. ARG_8blocs3_ensMaj.py: code to build ARGs on the test set in pop1 using the ensemble method 'Majority'.
 5. ARG_8blocs3_ensMean.py: code to build ARGs on the test set in pop1 using the ensemble method 'Mean'.
 6. ARG_8blocs3_memeS0.py: code to build ARGs with RL for the 60 samples in pop2 after the learning process.
-7. ARG_8blocs3_test.py: code to build ARGs on the test set in pop1 with 13 different agents.
+7. ARG_8blocs3_test.py: code to build ARGs on the test set in pop1 with 13 different agents and then use the ensemble method 'Minimum'.
 8. Actions2.py: code to identify possible actions and next states in a state *s*.
 9. Actions5.py: code to identify possible actions and next states in a state *s* according to the algorithm ARG4WG (recombinations are coded as defined in ARG4WG).
 10. Codages.py: code to get the feature vector according to different representation by blocks of markers.
