@@ -172,6 +172,7 @@ def recombin(dictEtatS, L):
     indexRecombin = random.randint(0, len(A_t) - 1)
     actionChoisie = A_t[indexRecombin]
 
+    #if the shared end is at the beginning (left)
     if(actionChoisie[2] == 'G'):
         seqI = actionChoisie[0]
         seqJ = actionChoisie[1]
@@ -196,6 +197,7 @@ def recombin(dictEtatS, L):
             seqK2[i] = seqI[i]
         for b in range(actionChoisie[3]):
             seqK1[b] = 9
+    #if the shared end is at the end (right)
     else:
         seqI = actionChoisie[0]
         seqJ = actionChoisie[1]
