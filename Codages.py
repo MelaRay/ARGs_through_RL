@@ -5,7 +5,7 @@ import math
 #Module with functions to code feature vector
 #Representation by blocks of markers
 
-#blocks of 2 and 3 markers
+#blocks of 2, 3, 4, and 5 markers
 ALL_marqueurs = [0,1,9]
 BLOCS_2 = list(itertools.product(ALL_marqueurs, repeat = 2))
 BLOCS_3 = list(itertools.product(ALL_marqueurs, repeat = 3))
