@@ -18,9 +18,6 @@ model = MyNN.MyModel()
 #File to stock the best model for each agent
 nomFichier = 'textFiles/Valid_bestModel_Agent1et2.txt'
 
-#File to stock the genealogy
-nomFichier2 = 'textFiles/tests.txt'
-
 #File to stock length of genealogies
 nomFichier3 = 'textFiles/Valid_Agent1et2.txt'
 
